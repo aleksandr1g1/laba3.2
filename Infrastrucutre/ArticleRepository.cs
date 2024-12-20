@@ -21,18 +21,16 @@ namespace laba3test.Infrastrucutre
         public override async Task<Guid> InsertAsync(Article entity)
         {
             var newId = Guid.NewGuid();
-            await ExecuteSqlAsync(
-                $"INSERT INTO public.articles (article_id, genre, title, artist, content) " +
-                $"VALUES ('{newId}', '{entity.genre}', '{entity.title}', '{entity.artist}', '{entity.content}')");
+            await this.ExecuteSqlAsync(
+                $"INSERT INTO public.articles (article_id, genre, title, artist, content) VALUES ('{newId}', '{entity.genre}', '{entity.title}', '{entity.artist}', '{entity.content}')");
 
             return newId;
         }
 
         public override async Task UpdateAsync(Guid id, Article entity)
         {
-            await ExecuteSqlAsync(
-                $"UPDATE public.articles SET genre='{entity.genre}', title='{entity.title}', artist='{entity.artist}', content='{entity.content}' " +
-                $"WHERE article_id='{id}'");
+            await this.ExecuteSqlAsync(
+                $"UPDATE public.articles SET genre='{entity.genre}', title='{entity.title}', artist='{entity.artist}', content='{entity.content}' WHERE article_id='{id}'");
         }
 
         protected override Article GetEntityFromReader(NpgsqlDataReader reader)
