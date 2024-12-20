@@ -24,9 +24,9 @@ namespace laba3test.Infrastrucutre
             var favArticles = string.Join(",", entity.favoriteArticles ?? Array.Empty<Guid>());
             var userComments = string.Join(",", entity.userComments ?? Array.Empty<Guid>());
 
-            await ExecuteSqlAsync(
-                $"INSERT INTO public.users (user_id, username, email, favorite_articles, user_comments) " +
-                $"VALUES ('{newId}', '{entity.username}', '{entity.email}', '{{{favArticles}}}', '{{{userComments}}}')");
+            await this.ExecuteSqlAsync(
+                $"INSERT INTO public.users (user_id, username, email, favorite_articles, user_comments) 
+                VALUES ('{newId}', '{entity.username}', '{entity.email}', '{{{favArticles}}}', '{{{userComments}}}')");
 
             return newId;
         }
@@ -36,10 +36,10 @@ namespace laba3test.Infrastrucutre
             var favArticles = string.Join(",", entity.favoriteArticles ?? Array.Empty<Guid>());
             var userComments = string.Join(",", entity.userComments ?? Array.Empty<Guid>());
 
-            await ExecuteSqlAsync(
-                $"UPDATE public.users SET username='{entity.username}', email='{entity.email}', " +
-                $"favorite_articles='{{{favArticles}}}', user_comments='{{{userComments}}}' " +
-                $"WHERE user_id='{id}'");
+            await this.ExecuteSqlAsync(
+                $"UPDATE public.users SET username='{entity.username}', email='{entity.email}',
+                favorite_articles='{{{favArticles}}}', user_comments='{{{userComments}}}' 
+                WHERE user_id='{id}'");
         }
 
         protected override User GetEntityFromReader(NpgsqlDataReader reader)
