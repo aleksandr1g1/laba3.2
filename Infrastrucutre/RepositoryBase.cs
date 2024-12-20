@@ -24,27 +24,45 @@ namespace laba3test.Infrastrucutre
 
         protected async Task<IEnumerable<T>> ExecuteSqlReaderAsync(string sql)
         {
+        if (sql is null)
+        {
+        throw new ArgumentNullException(nameof(sql));
+        }
             var results = new List<T>();
 
-            using var connection = new NpgsqlConnection(ConnectionString);
-            await connection.OpenAsync();
-
-            using var command = new NpgsqlCommand(sql, connection);
-            using var reader = await command.ExecuteReaderAsync();
-
-            while (await reader.ReadAsync())
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
-                results.Add(GetEntityFromReader(reader));
+                await connection.OpenAsync();
+
+                using (var command = new NpgsqlCommand(sql, connection))
+                {
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+
+                        while (await reader.ReadAsync())
+                        {
+                            results.Add(GetEntityFromReader(reader));
+                        }
+                    }
+                }
             }
             return results;
         }
 
         protected async Task ExecuteSqlAsync(string sql)
         {
-            using var connection = new NpgsqlConnection(ConnectionString);
-            await connection.OpenAsync();
-            using var command = new NpgsqlCommand(sql, connection);
-            await command.ExecuteNonQueryAsync();
+            if (sql is null)
+            {
+                throw new ArgumentNullException(nameof(sql));
+            }
+            using (var connection = new NpgsqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                using (var command = new NpgsqlCommand(sql, connection))
+                {
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
         }
 
         protected abstract T GetEntityFromReader(NpgsqlDataReader reader);
